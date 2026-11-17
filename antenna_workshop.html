@@ -71,9 +71,7 @@ main{position:relative;z-index:1;max-width:1680px;margin:0 auto;display:grid;gap
   grid-template-columns:300px minmax(0,1fr) 360px;
   grid-template-areas:"ctrl view det" "guide guide guide"}
 #controls{grid-area:ctrl}#viewPanel{grid-area:view}#details{grid-area:det}#guide{grid-area:guide}
-.panel{background:var(--glass);border:1px solid var(--line);border-radius:10px;padding:16px;min-width:0}
-@media (max-width:760px){.panel{-webkit-backdrop-filter:none;backdrop-filter:none;background:color-mix(in srgb,var(--panel) 92%,transparent)}}
-#bgfx{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;display:block}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px;min-width:0}
 .panel h2{font-size:.78rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:10px}
 @media (max-width:1240px){main{grid-template-columns:290px minmax(0,1fr);grid-template-areas:"ctrl view" "ctrl det" "guide guide"}}
 @media (max-width:760px){main{grid-template-columns:minmax(0,1fr);grid-template-areas:"view" "ctrl" "det" "guide"}.tag{display:none}}
@@ -117,7 +115,7 @@ body.minimal #viewer{height:max(440px,calc(100vh - 230px))}
 #legend{position:absolute;right:10px;top:10px;list-style:none;margin:0;padding:8px 10px;background:var(--panel);border:1px solid var(--line);border-radius:8px;font-size:.75rem;display:flex;flex-direction:column;gap:4px;pointer-events:none;max-width:45%}
 #legend li{display:flex;align-items:center;gap:7px;white-space:nowrap}
 #legend i{width:14px;height:4px;border-radius:2px;display:inline-block;flex:none}
-.hint{position:absolute;left:10px;bottom:10px;font-size:.74rem;color:var(--muted);background:var(--panel);border:1px solid var(--line);padding:5px 8px;border-radius:6px;pointer-events:none}
+.hint{font-size:.74rem;color:var(--muted);margin:8px 0 0}
 .viewbtns{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
 .viewbtns .spacer{flex:1}
 .radsel{display:flex;align-items:center;gap:6px;font-size:.82rem;color:var(--muted)}
@@ -125,8 +123,17 @@ body.minimal #viewer{height:max(440px,calc(100vh - 230px))}
 .radsel input[type=range]{width:96px;accent-color:var(--accent)}
 .radsel input[type=range]:disabled{opacity:.4}
 .cbar{display:inline-block;width:84px;height:8px;border-radius:2px;vertical-align:middle;margin:0 6px;background:linear-gradient(90deg,#00008f,#0000ff,#00ffff,#ffff00,#ff0000,#800000)}
-.radcap{position:absolute;left:10px;bottom:46px;font-size:.74rem;background:var(--panel);border:1px solid var(--line);padding:5px 8px;border-radius:6px;pointer-events:none;max-width:calc(100% - 20px)}
-@media (max-width:760px){.radcap{bottom:30px;font-size:.7rem}}
+.radcap{font-size:.78rem;color:var(--muted);margin:8px 0 0}
+.radcap b{color:var(--warn)}
+.simrow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:10px}
+.tile{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:8px 10px;min-width:0}
+.tile .k{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.tile .v{font-family:var(--font-mono);font-variant-numeric:tabular-nums;font-size:1.05rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tile .v.good{color:var(--ok)}.tile .v.poor{color:var(--warn)}
+@media (max-width:760px){.simrow{grid-template-columns:repeat(2,minmax(0,1fr))}}
+body.nosim .simonly{display:none!important}
+#smithCanvas{width:100%;max-width:300px;aspect-ratio:300/324;display:block;margin:8px auto 0}
+@media (max-width:760px){.top-actions{margin-left:0;flex-wrap:nowrap;gap:6px}.top-actions .btn{padding:5px 8px;font-size:.8rem;white-space:nowrap}}
 @media (max-width:760px){.hint{display:none}#legend{position:static;max-width:none;flex-direction:row;flex-wrap:wrap;gap:4px 12px;margin-top:8px;border:0;padding:0;background:none}.status{font-size:.72rem;padding:4px 8px}}
 
 /* Antenna info card */
@@ -161,7 +168,9 @@ th{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--mu
 td.num,th.num{text-align:right;white-space:nowrap}
 td .kind{display:block;font-size:.7rem;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
 tr.hl td{background:color-mix(in srgb,var(--dim) 14%,transparent)}
-#rows tr{cursor:pointer}
+#rows tr[data-id]{cursor:pointer}
+#rows tr[data-id]:hover td{background:color-mix(in srgb,var(--dim) 7%,transparent)}
+td.txt{text-align:right;font-family:var(--font-mono);font-size:.82rem}
 .notes{color:var(--muted);font-size:.84rem;margin:12px 0 0}
 .warns{list-style:none;padding:0;margin:10px 0 0;display:flex;flex-direction:column;gap:6px}
 .warns li{font-size:.82rem;padding:7px 9px;border-left:3px solid var(--warn);background:color-mix(in srgb,var(--warn) 9%,transparent);border-radius:0 6px 6px 0}
@@ -210,7 +219,7 @@ a{color:var(--dim)}
 .wcalc td,.wcalc th{font-size:.84rem}
 .wcalc tr.ours td{font-weight:600}
 .src{font-size:.78rem;color:var(--muted);margin-top:12px}
-footer.maker{position:relative;z-index:1;max-width:1680px;margin:16px auto 0;display:flex;flex-wrap:wrap;align-items:center;gap:14px 24px;padding:18px 20px;border:1px solid var(--line);border-radius:10px;background:var(--glass)}
+footer.maker{position:relative;z-index:1;max-width:1680px;margin:16px auto 0;display:flex;flex-wrap:wrap;align-items:center;gap:14px 24px;padding:18px 20px;border:1px solid var(--line);border-radius:10px;background:var(--panel)}
 .maker .who{display:flex;align-items:center;gap:14px;min-width:0;flex:1 1 380px}
 .maker .badge{flex:none;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:color-mix(in srgb,var(--accent) 18%,transparent);border:1px solid var(--accent);color:var(--accent);font:700 1rem/1 var(--font-mono)}
 .maker h2{font-size:.98rem;margin:0 0 2px;letter-spacing:0;text-transform:none;color:var(--fg)}
@@ -223,12 +232,11 @@ body.minimal footer.maker{padding:12px 14px}
 </head><body>
 
 
-<canvas id="bgfx" aria-hidden="true"></canvas>
 <header class="top">
   <canvas id="spectrum" aria-hidden="true"></canvas>
   <div class="brand">
     <h1>Antenna Workshop</h1>
-    <span class="ver">Beta 0.7</span>
+    <span class="ver">Beta 0.7.1</span>
     <span class="tag">One speed c, seven bands. This workshop lives in radio.</span>
   </div>
   <div class="top-actions">
@@ -263,8 +271,8 @@ body.minimal footer.maker{padding:12px 14px}
         <small>Copper tape on a board resonates shorter. K values are from the WA6YOU drawing; foam board matches its 446 MHz example.</small>
       </div>
       <div class="field wide" data-input="angle">
-        <label for="angle"><span id="angleLabel">Slope below horizontal</span>: <b id="angleValue" class="mono">45°</b></label>
-        <input type="range" id="angle" min="0" max="80" value="45" step="1">
+        <label for="angle"><span id="angleLabel">Slope below horizontal</span>: <b id="angleValue" class="mono">30°</b></label>
+        <input type="range" id="angle" min="0" max="80" value="30" step="1">
       </div>
       <div class="field" data-input="jspace">
         <label for="jspace">Conductor spacing (<span class="lu">mm</span>)</label>
@@ -290,18 +298,18 @@ body.minimal footer.maker{padding:12px 14px}
         <label for="ph">Board thickness (<span class="lu">mm</span>)</label>
         <input id="ph" type="number" min="0.2" max="10" step="0.1" value="1.6">
       </div>
-      <hr class="sep adv">
-      <div class="field adv">
+      <hr class="sep adv simonly">
+      <div class="field adv simonly">
         <label for="trim">Trim factor (element lengths)</label>
         <input id="trim" type="number" min="0.8" max="1.2" step="0.005" value="1">
         <small>1.000 = nominal. Use it to cut long for trimming. Spacings and the balun are not scaled.</small>
       </div>
-      <div class="field adv">
+      <div class="field adv simonly">
         <label for="material">Conductor</label>
         <select id="material"><option value="copper">Copper wire / rod</option><option value="aluminum">Aluminium rod / tube</option><option value="brass">Brass rod</option><option value="tape">Copper foil tape</option></select>
         <small id="materialTip"></small>
       </div>
-      <div class="field adv">
+      <div class="field adv simonly">
         <label for="diameter">Diameter / tape width (<span class="lu">mm</span>)</label>
         <input id="diameter" type="number" min="0.1" max="100" step="0.1" value="2">
         <small>Used for the wire radius in the simulation and in the wiki comparison. Not yet used in the cut list.</small>
@@ -322,19 +330,25 @@ body.minimal footer.maker{padding:12px 14px}
       <canvas id="viewer" tabindex="0" aria-label="Rotatable 3D antenna model. Arrow keys rotate, shift and arrows pan, plus and minus zoom, zero resets." aria-describedby="srDesc"></canvas>
       <div class="status calculated" id="status"><span class="ico" aria-hidden="true">○</span><span id="statusText">Calculated starting dimensions</span></div>
       <ul id="legend" aria-label="Colour legend"></ul>
-      <div class="radcap" id="radCap" hidden></div>
-      <div class="hint">Drag: rotate · Right-drag or Shift-drag: pan · Wheel: zoom · Keys work too</div>
     </div>
     <p id="srDesc" hidden></p>
+    <div class="simrow simonly" id="simRow" aria-live="polite">
+      <div class="tile"><div class="k">Directivity</div><div class="v" id="sDir">–</div></div>
+      <div class="tile"><div class="k">Front / back</div><div class="v" id="sFb">–</div></div>
+      <div class="tile"><div class="k">Feed impedance</div><div class="v" id="sZ">–</div></div>
+      <div class="tile"><div class="k">SWR on 50 Ω</div><div class="v" id="sSwr">–</div></div>
+    </div>
+    <p class="radcap" id="radCap"></p>
     <div class="viewbtns">
       <button class="btn sm" data-view="front">Front</button><button class="btn sm" data-view="side">Side</button>
       <button class="btn sm" data-view="top">Top</button><button class="btn sm" data-view="iso">Isometric</button>
       <span class="spacer"></span>
-      <button class="btn sm" id="radBtn" aria-pressed="true" title="Show the 3D radiation pattern around the antenna">3D pattern</button>
-      <label class="radsel" for="radOp">Opacity <input type="range" id="radOp" min="15" max="100" step="5" value="100"></label>
+      <button class="btn sm simonly" id="radBtn" aria-pressed="true" title="Show the 3D radiation pattern around the antenna">3D pattern</button>
+      <label class="radsel simonly" for="radOp">Opacity <input type="range" id="radOp" min="15" max="100" step="5" value="55"></label>
       <button class="btn sm" id="dimsBtn" aria-pressed="true">Dimensions</button>
       <button class="btn sm" id="labelsBtn" aria-pressed="true">Labels</button>
     </div>
+    <p class="hint">Drag: rotate · Right-drag or Shift-drag: pan · Wheel: zoom · Keys work too · Conductor thickness is not to scale</p>
 
     <details class="info" id="info" open>
       <summary><span id="infoTitle">About this antenna</span><span class="sub" id="infoSub"></span></summary>
@@ -380,6 +394,11 @@ body.minimal footer.maker{padding:12px 14px}
       <summary>Source check</summary>
       <p class="srcnote" id="srcLabel"></p>
       <div class="tablewrap"><table><thead><tr><th>Item</th><th class="num">Source</th><th class="num">App</th><th class="num">Δ</th></tr></thead><tbody id="srcRows"></tbody></table></div>
+    </details>
+    <details class="box adv simonly" id="smithBox" open>
+      <summary>Feed impedance on a Smith chart</summary>
+      <canvas id="smithCanvas" width="300" height="324" role="img" aria-label="Smith chart with the simulated feed impedance marked"></canvas>
+      <p class="srcnote" id="smithCap"></p>
     </details>
   </section>
 
@@ -456,7 +475,7 @@ body.minimal footer.maker{padding:12px 14px}
         <details open>
           <summary><span class="q">Q</span>How is dipole antenna length calculated?</summary>
           <div class="art">
-            <p>A half-wave dipole is cut a little shorter than half a wavelength in free space. The wave travels slightly slower along a real conductor, and the ends add some capacitance, so the antenna resonates when it is about 95–98% of λ/2. There are three common ways to get the number.</p>
+            <p>A half-wave dipole is cut a little shorter than half a wavelength in free space. A thin wire of exactly λ/2 is slightly inductive. Capacitance at the ends and the thickness of the conductor mean it resonates when it is a little shorter, about 95–98% of λ/2. There are three common ways to get the number.</p>
 
             <h4>1. The 468 rule of thumb</h4>
             <div class="formula">L = 468 / f      (feet, f in MHz)
@@ -480,7 +499,7 @@ R = (λ / 2) / d</div>
             <p class="srcnote" id="wkNote"></p>
 
             <h4>How this app does it</h4>
-            <p>The dipole cut list uses 0.238 λ per arm, 0.476 λ in total. That is 95.2% of λ/2, the same as the 468 rule. The app does not yet use the conductor diameter. Compared with the app, the k-factor method gives up to about 3% more length for thin wire and less length for thick tubes, so cut long and trim either way.</p>
+            <p>The dipole cut list uses 0.476 λ tip to tip, with the feed gap inside that length. That is 95.2% of λ/2, the same as the 468 rule. The app does not yet use the conductor diameter. Compared with the app, the k-factor method gives up to about 3% more length for thin wire and less length for thick tubes, so cut long and trim either way.</p>
 
             <h4>Building one</h4>
             <ul>
@@ -526,7 +545,16 @@ R = (λ / 2) / d</div>
     </div>
 
     <div id="tNew" role="tabpanel" hidden>
-      <h3 style="font-size:.95rem;margin-bottom:6px">0.7.0</h3>
+      <h3 style="font-size:.95rem;margin-bottom:6px">0.7.1</h3>
+      <ul class="prose">
+        <li>Dipole and inverted-V: the feed gap now sits inside the 0.476 λ tip-to-tip length, and the gap shrinks at high frequencies. Before, the gap was added on top, which made the antenna several percent long at 868 MHz and above.</li>
+        <li>Corrected texts: a ground plane with flat radials is about 20–25 Ω (not 36 Ω) and reaches 50 Ω near 30° slope, which is the new default. Inverted-V resonance moves up, not down, in free space. Yagi and helix gain notes now point at the simulated figure.</li>
+        <li>Simulated directivity, front/back, impedance and SWR have their own tiles under the 3D view and stay visible when the 3D pattern is off. The pattern starts semi-transparent so the antenna stays visible.</li>
+        <li>The Smith chart is now a card under the cut list instead of a page background. Panels are opaque.</li>
+        <li>Picking a design sets a sensible conductor: ½-inch tape for the Yagi, 1 mm wire for the helix and sleeve dipole.</li>
+        <li>Fixes: clipped helix cut list, overlapping text in the 3D view, page freezing while the helix simulates, unused controls on the patch, header buttons on phones, a warning for patch boards too thick for the model.</li>
+      </ul>
+      <h3 style="font-size:.95rem;margin:12px 0 6px">0.7.0</h3>
       <ul class="prose">
         <li>FPV antennas. New designs: sleeve dipole (ELRS 2.4 GHz and digital VTX), axial-mode helix (5.8 GHz goggles, RHCP or LHCP) and a rectangular patch calculator.</li>
         <li>FPV frequency presets: 868, 915, 2440 and 5800 MHz. Frequencies up to 6 GHz. Picking an FPV design outside its band jumps to a typical frequency.</li>
@@ -605,7 +633,7 @@ R = (λ / 2) / d</div>
 
 <script>
 "use strict";
-const VERSION = "0.7.0";
+const VERSION = "0.7.1";
 const C = 299792458;
 const $ = id => document.getElementById(id);
 const MM = 0.001;
@@ -860,7 +888,7 @@ const RECORDS = [
   },
   feed: () => v(0, 0, 0),
   notes: "Radiator 0.238 λ and radials 0.262 λ match the WA6YOU formulas (about 0.95 × λ/4, radials 10% longer). Treat them as a starting heuristic and trim after measuring.",
-  warnings: () => ["Radial slope changes the feed impedance. Around 30–45° below horizontal is a common starting range; confirm with an analyser."],
+  warnings: () => ["Radial slope changes the feed impedance. Around 30° below horizontal is a good starting point for 50 Ω; confirm with an analyser."],
   source: (s, d) => ({ label: "WA6YOU field-expedient ground plane: radiator 2808 / f, radial 3088 / f (inches).",
     items: [["Radiator", 2808 / s.f * 0.0254, d.rad], ["Radial", 3088 / s.f * 0.0254, d.radial]] }),
   info: {
@@ -868,11 +896,11 @@ const RECORDS = [
     how: "The quarter-wave radiator is one half of a dipole. The radials stand in for the missing half and form an artificial ground. Currents in opposite radials flow in opposite directions, so the radials radiate very little themselves.",
     why: "It is the simplest omnidirectional vertical you can build: one connector, five wires, no matching network. Vertical polarisation matches handhelds, mobiles and most FM repeaters.",
     props: [["Polarisation", "Vertical"], ["Horizontal pattern", "Omnidirectional"], ["Vertical pattern", "Low-angle lobe, null straight up"],
-      ["Feed impedance", "About 36 Ω with flat radials, rising toward 50 Ω as they slope down"], ["Feed type", "Unbalanced, connects straight to coax"],
+      ["Feed impedance", "About 20–25 Ω with flat radials, near 50 Ω at roughly 30° slope, higher beyond that"], ["Feed type", "Unbalanced, connects straight to coax"],
       ["Bandwidth", "Moderate; wider with thicker conductors"]],
     pattern: "monopole", radiation: "Energy leaves in a doughnut around the radiator, strongest toward the horizon. Coax and mast can carry current back down and tilt the doughnut; three or four radials keep that small.",
-    swr: "With flat radials the feed is near 36 Ω, so even a perfectly resonant antenna shows about 1.4 : 1 on 50 Ω coax. Sloping the radials raises the resistance and lowers that minimum. If the SWR dip sits below your frequency, the radiator is too long.",
-    effects: [["Longer radiator", "Resonance moves lower in frequency"], ["Radials sloped further down", "Feed resistance rises toward 50 Ω; pattern lifts slightly"],
+    swr: "With four flat radials the feed is only about 20–25 Ω (the often-quoted 36 Ω needs an infinite ground), so even a resonant antenna shows 2 : 1 or worse on 50 Ω coax. Sloping the radials raises the resistance: around 30° gives close to 50 Ω, and steeper slopes overshoot. If the SWR dip sits below your frequency, the radiator is too long.",
+    effects: [["Longer radiator", "Resonance moves lower in frequency"], ["Radials sloped further down", "Feed resistance rises: about 50 Ω near 30°, higher beyond"],
       ["Fewer than three radials", "Uneven pattern and more current on the coax"], ["Thicker radiator", "Wider SWR bandwidth, slightly shorter resonant length"],
       ["Metal or walls nearby", "Detunes and distorts the pattern; remeasure in place"]]
   },
@@ -882,13 +910,14 @@ const RECORDS = [
 {
   id: "dip", name: "Half-wave dipole", status: "calculated", base: "lambda", inputs: [],
   parts: [
-    { id: "arm", name: "Arm", ratio: 0.238, qty: 2, role: "driven" },
-    { id: "gap", name: "Centre feed gap (not in arm length)", fixed: 6 * MM, kind: "gap", trim: false }
+    { id: "total", name: "Tip to tip, including feed gap", ratio: 0.476, kind: "check" },
+    { id: "gap", name: "Centre feed gap", calc: (s, l) => Math.min(6 * MM, 0.02 * l), kind: "gap" },
+    { id: "arm", name: "Arm", calc: (s, l, d) => (d.total - d.gap) / 2, qty: 2, role: "driven" }
   ],
-  derive: d => [lenRow("total", "Both arms together", 2 * d.arm)],
+  derive: () => [], rowOrder: ["arm", "gap", "total"],
   geometry: d => [seg(v(-d.gap / 2, 0, 0), v(-d.gap / 2 - d.arm, 0, 0), "driven", "arm", "Arm ×2"), seg(v(d.gap / 2, 0, 0), v(d.gap / 2 + d.arm, 0, 0), "driven", "arm", "")],
   feed: () => v(0, 0, 0),
-  notes: "Each arm is 0.238 λ, so both arms together are about 0.95 × λ/2. Trim both arms equally.",
+  notes: "Tip to tip is 0.476 λ (about 0.95 × λ/2) with the feed gap inside that length. Trim both arms equally.",
   warnings: () => ["Fit a 1:1 current choke at the feed to keep the coax from radiating."],
   info: {
     sub: "Broadside figure-eight · balanced · the reference antenna",
@@ -908,12 +937,14 @@ const RECORDS = [
 {
   id: "inv", name: "Inverted-V dipole", status: "calculated", base: "lambda", inputs: ["angle"], angleLabel: "Arm slope below horizontal",
   parts: [
-    { id: "arm", name: "Arm", ratio: 0.238, qty: 2, role: "driven" },
-    { id: "gap", name: "Centre feed gap", fixed: 6 * MM, kind: "gap", trim: false }
+    { id: "total", name: "Tip to tip along the wire, including feed gap", ratio: 0.476, kind: "check" },
+    { id: "gap", name: "Centre feed gap", calc: (s, l) => Math.min(6 * MM, 0.02 * l), kind: "gap" },
+    { id: "arm", name: "Arm", calc: (s, l, d) => (d.total - d.gap) / 2, qty: 2, role: "driven" }
   ],
+  rowOrder: ["arm", "gap", "total"],
   derive(d, s) {
     const a = s.angle * Math.PI / 180;
-    return [lenRow("total", "Both arms together", 2 * d.arm), angRow("slope", "Arm slope below horizontal", s.angle), angRow("inc", "Included angle between arms", 180 - 2 * s.angle),
+    return [angRow("slope", "Arm slope below horizontal", s.angle), angRow("inc", "Included angle between arms", 180 - 2 * s.angle),
       lenRow("span", "Tip-to-tip horizontal span", 2 * d.arm * Math.cos(a) + d.gap), lenRow("drop", "Drop from feed to tips", d.arm * Math.sin(a))];
   },
   geometry(d, s) { const a = s.angle * Math.PI / 180, dx = Math.cos(a), dz = Math.sin(a);
@@ -927,9 +958,9 @@ const RECORDS = [
     why: "Needs only one tall support, and the drooping arms often bring the feed resistance close to 50 Ω without a matching network.",
     props: [["Polarisation", "Mostly horizontal broadside, mixed off the ends"], ["Pattern", "Flatter than a dipole, shallower end nulls"],
       ["Feed impedance", "Lower than a flat dipole; drops as the included angle narrows"], ["Feed type", "Balanced; use a 1:1 current choke"],
-      ["Resonant length", "Usually a little shorter than a flat dipole"], ["Bandwidth", "Similar to a dipole, slightly narrower"]],
+      ["Resonant length", "Slightly longer than a flat dipole in free space; tips close to ground pull it shorter"], ["Bandwidth", "Similar to a dipole, slightly narrower"]],
     pattern: null, radiation: "Less directional than a flat dipole and with more radiation off the ends. The exact pattern depends on the angle and height, so no idealised plot is shown.",
-    swr: "Expect the SWR dip to move lower in frequency as you droop the arms, so trim after setting the final angle. Ends close to the ground or walls add loss and detune it.",
+    swr: "Drooping the arms shifts the SWR dip: upward in frequency when the antenna is well clear of the ground (as simulated here), downward when the tips come close to the ground. Set the final angle first, then trim. Ends close to the ground or walls add loss and detune it.",
     effects: [["Narrower included angle", "Lower feed resistance, end nulls fill in, resonance shifts"], ["Longer arms", "Resonance moves lower"],
       ["Tips near ground or people", "Detuning, loss and an RF-burn risk at the tips"], ["Feed point raised", "More like a flat dipole at the same angle"]]
   },
@@ -958,7 +989,7 @@ const RECORDS = [
   guide: { summary: "End-fed half-wave vertical.", mat: "Rod or stiff wire, insulating base, weatherproof box for the matching network.", feed: "Requires an end-feed matching network and a choke. Not shown here.", tips: "Tune the radiator and matching network together with an analyser.", use: "Compact verticals where radials are unwanted.", lim: "Matching is essential; feedline current distorts the pattern." }
 },
 {
-  id: "yagi", name: "4-element Yagi-Uda (tape)", status: "calculated", base: "lambdaK", inputs: ["substrate"],
+  id: "yagi", name: "4-element Yagi-Uda (tape)", status: "calculated", base: "lambdaK", inputs: ["substrate"], conductor: ["tape", 12.7],
   parts: [
     { id: "refl", name: "Reflector", ratio: 0.525, role: "reflector", kind: "length" },
     { id: "drv", name: "Driven element, overall incl. gap", ratio: 0.475, role: "driven", kind: "length" },
@@ -1000,7 +1031,7 @@ const RECORDS = [
       ["Directors shorter", "Pattern and gain optimise higher in the band"], ["Closer spacing", "Lower feed resistance, narrower bandwidth"],
       ["Metal boom through the elements", "Elements act shorter; needs a boom correction"]]
   },
-  guide: { summary: "Four-element directional array on a board: reflector, driven element and two directors.", mat: "½-inch copper foil tape (the source uses Scotch X-1181) on a flat board; thin 50 Ω coax such as RG-316 or RG-174.", feed: "Split driven element with a 6 mm gap, fed through the source's 0.25 X coax balun. Keep feed leads very short.", tips: "Set the board type first. Measure spacing centre to centre. Keep elements parallel and square to the boom line.", use: "Point-to-point links, direction finding, satellite and experimental UHF.", lim: "Geometry-sensitive. Gain is not verified." },
+  guide: { summary: "Four-element directional array on a board: reflector, driven element and two directors.", mat: "½-inch copper foil tape (the source uses Scotch X-1181) on a flat board; thin 50 Ω coax such as RG-316 or RG-174.", feed: "Split driven element with a 6 mm gap, fed through the source's 0.25 X coax balun. Keep feed leads very short.", tips: "Set the board type first. Measure spacing centre to centre. Keep elements parallel and square to the boom line.", use: "Point-to-point links, direction finding, satellite and experimental UHF.", lim: "Geometry-sensitive. Gain figures are estimates until measured." },
   golden: [{ f: 446, inputs: { substrate: "foam" }, label: "WA6YOU tape Yagi at 446 MHz, foam board",
     expect: { refl: 0.3284, drv: 0.2971, d1: 0.2815, d2: 0.2690, s1: 0.1251, s2: 0.0938, s3: 0.1001, bal: 0.1564 }, tol: 0.005 }]
 },
@@ -1061,7 +1092,7 @@ const RECORDS = [
   guide: { summary: "Compact two-element beam with folded ends.", mat: "Stiff wire or rod on a non-conducting frame.", feed: "Centre-feed the driven element with a choke.", tips: "Use a Moxon calculator for your wire size. Keep both gaps identical.", use: "Portable directional work where a Yagi is too big.", lim: "This view shows proportions, not build dimensions." }
 },
 {
-  id: "sleeve", name: "Sleeve dipole (ELRS / digital VTX)", status: "calculated", base: "lambda", inputs: [], typicalF: 2440, band: [700, 6000],
+  id: "sleeve", name: "Sleeve dipole (ELRS / digital VTX)", status: "calculated", base: "lambda", inputs: [], typicalF: 2440, band: [700, 6000], conductor: ["copper", 1],
   parts: [
     { id: "rad", name: "Radiator, bare centre conductor", ratio: 0.238, role: "driven" },
     { id: "slv", name: "Sleeve, braid or brass tube", ratio: 0.238, role: "sleeve" }
@@ -1085,7 +1116,7 @@ const RECORDS = [
   guide: { summary: "Half-wave dipole made from the end of a coax cable.", mat: "Thin 50 Ω coax (RG-178, RG-316 or 1.13 mm), a brass tube or the braid folded back, heat-shrink, ferrite beads for a choke.", feed: "Coax runs up the inside of the sleeve; the centre conductor continues as the radiator.", tips: "Cut slightly long, measure, trim the radiator and sleeve together. Keep the elements clear of carbon fibre.", use: "ELRS 2.4 GHz receivers, digital and analog VTX where linear polarisation matches the other end.", lim: "Linear: loses signal when the two antennas are crossed at 90°." }
 },
 {
-  id: "helix", name: "Axial-mode helix (5.8 GHz goggles)", status: "calculated", base: "lambda", inputs: ["turns", "hand"], typicalF: 5800, band: [1000, 6000],
+  id: "helix", name: "Axial-mode helix (5.8 GHz goggles)", status: "calculated", base: "lambda", inputs: ["turns", "hand"], typicalF: 5800, band: [1000, 6000], conductor: ["copper", 1],
   parts: [
     { id: "circ", name: "Turn circumference (C ≈ λ)", ratio: 1.0, kind: "check" },
     { id: "pitch", name: "Spacing between turns (S)", ratio: 0.23, kind: "spacing", trim: false },
@@ -1113,7 +1144,7 @@ const RECORDS = [
   notes: "Kraus axial-mode design: circumference about one wavelength, turns spaced about 0.23 λ (pitch angle near 13°), on a ground plane at least 0.75 λ across. It radiates a circularly polarised beam off the open end. The winding sets the hand: a right-hand screw thread gives RHCP.",
   warnings: (d, s) => ["Match the hand at both ends: RHCP with RHCP. Mixing RHCP and LHCP costs roughly 20 dB or more.",
     `Feed impedance is about 140 Ω. Match it to 50 Ω, for example by flattening the first quarter-turn close to the ground plane or with a quarter-wave transformer.`,
-    `Kraus estimate: about ${(10 * Math.log10(15 * s.turns * 0.23)).toFixed(1)} dBi for ${s.turns} turns. Measured helices usually come in a little lower.`],
+    `Kraus estimate: about ${(10 * Math.log10(15 * s.turns * 0.23)).toFixed(1)} dBi for ${s.turns} turns. Real helices usually come in 2–4 dB lower; compare the simulated directivity under the 3D view.`],
   info: {
     sub: "Directional · circular polarisation · high-gain receive for goggles and ground stations",
     how: "When each turn is about one wavelength around, the current travels along the wire as a wave and the helix radiates along its axis. Because the current rotates as it climbs, the field rotates too, which gives circular polarisation.",
@@ -1154,7 +1185,8 @@ const RECORDS = [
   },
   feed: (d, s) => v(0, -d.L / 2 + d.inset, s.ph * MM),
   notes: "Transmission-line model (Balanis): W from the board permittivity, L from the effective permittivity minus the fringing extension at each edge. The inset depth uses the edge resistance without mutual coupling, so treat it as a starting point and tune.",
-  warnings: () => ["FR-4 loss and permittivity vary at 5.8 GHz. Expect to trim L and move the feed.", "FPV patches are usually circularly polarised: two opposite corners are trimmed off. Tune the corner cuts with an analyser."],
+  warnings: (d, s) => ["FR-4 loss and permittivity vary at 5.8 GHz. Expect to trim L and move the feed.", "FPV patches are usually circularly polarised: two opposite corners are trimmed off. Tune the corner cuts with an analyser."]
+    .concat(s.ph * MM > 0.05 * C / (s.f * 1e6) ? ["The board is thicker than about 0.05 λ. The transmission-line model is not reliable this thick; use a thinner board or expect large errors."] : []),
   info: {
     sub: "Directional · flat · linear here, circular with trimmed corners",
     how: "A metal rectangle sits a small height above a ground plane. It resonates when its length is about half a wavelength in the board material. The fields leaking out of its two short edges add up in front of the patch, so it radiates one broad beam.",
@@ -1385,18 +1417,18 @@ function generate() {
 
   if (!(s.f >= 1 && s.f <= 6000 && s.turns >= 2 && s.turns <= 20 && s.ph > 0 && s.trim >= 0.8 && s.trim <= 1.2 && s.jspace > 0 && s.jtap > 0)) {
     res = null; model = []; sim = null;
-    $("rows").innerHTML = '<tr><td colspan="3">Enter a frequency from 1 to 6000 MHz, a trim factor from 0.8 to 1.2, and 2 to 20 helix turns.</td></tr>';
-    $("warns").innerHTML = ""; $("notes").textContent = ""; $("lam").textContent = ""; render(); return;
+    $("rows").innerHTML = '<tr><td colspan="3">Enter a frequency from 1 to 6000 MHz, a trim factor from 0.8 to 1.2, 2 to 20 helix turns, and J-pole spacing and tap above zero.</td></tr>';
+    $("warns").innerHTML = ""; $("notes").textContent = ""; $("lam").textContent = ""; clearTimeout(simTimer); simPending = false; updateSim(); drawSmith(); render(); return;
   }
   res = compute(rec, s); model = res.geom;
-  sim = radOn ? simulate(res) : null;
+  scheduleSim(); updateSim();
 
   $("lam").textContent = `λ = ${isImp() ? fmt(res.lambda) : res.lambda.toFixed(4) + " m"} · λ/4 = ${fmt(res.lambda / 4)}`;
   const st = STATUS[rec.status], pill = $("status");
   pill.className = "status " + rec.status; pill.querySelector(".ico").textContent = st.ico; $("statusText").textContent = st.label;
   $("sheetTitle").textContent = rec.name;
   $("sheetFreq").textContent = s.f + " MHz" + (rec.base === "lambdaK" ? " · K " + s.K.toFixed(2) : "") + (s.trim !== 1 ? " · trim " + s.trim.toFixed(3) : "");
-  $("rows").innerHTML = res.rows.map(r => `<tr data-id="${r.id}"${r.id === highlight ? ' class="hl"' : ""}><td>${r.name}${KIND_LABEL[r.kind] ? `<span class="kind">${KIND_LABEL[r.kind]}</span>` : ""}</td><td class="num">${r.qty}</td><td class="num">${fmtRow(r)}</td></tr>`).join("");
+  $("rows").innerHTML = res.rows.map(r => `<tr data-id="${r.id}" tabindex="0"${r.id === highlight ? ' class="hl"' : ""}><td>${r.name}${KIND_LABEL[r.kind] ? `<span class="kind">${KIND_LABEL[r.kind]}</span>` : ""}</td>${r.kind === "info" ? `<td class="txt" colspan="2">${fmtRow(r)}</td>` : `<td class="num">${r.qty}</td><td class="num">${fmtRow(r)}</td>`}</tr>`).join("");
   $("warns").innerHTML = res.warnings.map(w => `<li>${w}</li>`).join("");
   $("notes").textContent = res.notes;
 
@@ -1451,7 +1483,7 @@ function drawPattern(kind) {
   // rings at -3, -10, -20 dB (field ratio), plus the 0 dB ring
   for (const db of [0, -3, -10, -20]) { const r = R * Math.pow(10, db / 20);
     c.beginPath(); kind === "monopole" ? c.arc(cx, cy, r, Math.PI, 2 * Math.PI) : c.arc(cx, cy, r, 0, 2 * Math.PI); c.stroke();
-    if (db) c.fillText(db + " dB", cx + r * 0.7 + 3, cy - r * 0.7 - 2); }
+    if (db === -3 || db === -10) c.fillText(db + " dB", cx + r * 0.7 + 3, cy - r * 0.7 - 2); }
   c.beginPath(); c.moveTo(cx - R, cy); c.lineTo(cx + R, cy); if (kind !== "monopole") { c.moveTo(cx, cy - R); c.lineTo(cx, cy + R); } else { c.moveTo(cx, cy); c.lineTo(cx, cy - R); } c.stroke();
   // conductor
   c.strokeStyle = tokens.roles.driven; c.lineWidth = 3; c.beginPath();
@@ -1477,26 +1509,16 @@ function drawPattern(kind) {
 }
 
 
-/* ---------- Background: radiating dipole wavefronts + Smith chart ----------
-   Decorative, but physically shaped: a vertical half-wave dipole at the centre of the
-   3D viewer sends wavefronts whose brightness follows its free-space pattern (nulls off the
-   wire ends). Ring spacing follows the design frequency on a log scale. The Smith
-   chart marks the selected design's textbook feed impedance on a 50 Ω system. */
-const bg = $("bgfx"), bctx = bg.getContext("2d");
+/* ---------- Smith chart card ----------
+   A normalised 50 Ω Smith chart under the cut list. The dot is the simulated feed impedance;
+   the dashed circle is SWR 2. Nothing is marked when there is no simulation result. */
 const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)");
-const Z_NOM = { gp: 36, dip: 73, inv: 50, jpole: 50, moxon: 50 };
-let fxOn = true, fxRaf = 0, fxLast = 0, smithCache = null, bgW = 0, bgH = 0, bgDpr = 1;
-const SEG = 72, PAT = Array.from({ length: SEG }, (_, i) => { // vertical dipole: angle from wire = phi + 90°
-  const phi = (i + 0.5) / SEG * 2 * Math.PI; return halfWave(phi + Math.PI / 2) ** 2; });
-function bgResize() {
-  bgDpr = Math.min(window.devicePixelRatio || 1, 1.5); bgW = innerWidth; bgH = innerHeight;
-  bg.width = Math.max(1, Math.round(bgW * bgDpr)); bg.height = Math.max(1, Math.round(bgH * bgDpr));
-  bctx.setTransform(bgDpr, 0, 0, bgDpr, 0, 0); smithCache = null; drawBg(performance.now());
-}
-function smithGeom() { const R = Math.min(bgW, bgH) * (bgW < 760 ? 0.42 : 0.3); return { cx: bgW - R * 0.55 - 12, cy: bgH - R * 0.62 - 12, R }; }
-function buildSmith() {
-  const { cx, cy, R } = smithGeom(), oc = document.createElement("canvas");
-  oc.width = bg.width; oc.height = bg.height; const c = oc.getContext("2d"); c.setTransform(bgDpr, 0, 0, bgDpr, 0, 0);
+let fxOn = true, fxRaf = 0, fxLast = 0;
+function drawSmith() {
+  const cv = $("smithCanvas"); if (!cv || !tokens.smith) return;
+  const dpr = Math.min(window.devicePixelRatio || 1, 2), W = 300, H = 324; cv.width = W * dpr; cv.height = H * dpr;
+  const c = cv.getContext("2d"); c.setTransform(dpr, 0, 0, dpr, 0, 0); c.clearRect(0, 0, W, H);
+  const cx = W / 2, cy = H / 2, R = 136;
   c.strokeStyle = tokens.smith; c.lineWidth = 1;
   c.beginPath(); c.arc(cx, cy, R, 0, 2 * Math.PI); c.stroke();
   c.save(); c.beginPath(); c.arc(cx, cy, R, 0, 2 * Math.PI); c.clip();
@@ -1504,32 +1526,20 @@ function buildSmith() {
   for (const r of [0.2, 0.5, 1, 2, 5]) { c.beginPath(); c.arc(cx + R * r / (1 + r), cy, R / (1 + r), 0, 2 * Math.PI); c.stroke(); }
   for (const x of [0.2, 0.5, 1, 2, 5]) for (const sg of [1, -1]) { c.beginPath(); c.arc(cx + R, cy - sg * R / x, R / x, 0, 2 * Math.PI); c.stroke(); }
   c.restore();
-  c.fillStyle = tokens.smith; c.font = "10px " + font(); c.textAlign = "center";
+  c.strokeStyle = tokens.dim; c.setLineDash([4, 3]); c.beginPath(); c.arc(cx, cy, R / 3, 0, 2 * Math.PI); c.stroke(); c.setLineDash([]);
+  c.fillStyle = tokens.muted; c.font = "10px " + font(); c.textAlign = "center";
   for (const r of [0.2, 0.5, 1, 2, 5]) { const g = (r - 1) / (r + 1); c.fillText(String(r * 50), cx + R * g, cy - 4); }
-  c.fillText("Ω", cx + R + 10, cy + 3);
-  return oc;
-}
-function lamPx() {
-  const f = Math.min(3000, Math.max(30, +$("freq").value || 446)), t = (Math.log10(f) - Math.log10(30)) / 2; // 30 MHz → 0, 3 GHz → 1
-  return 150 - 104 * t;
-}
-function drawBg(ts) {
-  if (!bgW || !bgH || !bg.width || !bg.height) return; // not sized yet (first paint, hidden frame)
-  bctx.clearRect(0, 0, bgW, bgH);
-  const light = getComputedStyle(document.documentElement).colorScheme === "light", A = light ? 0.8 : 1;
-  if (!smithCache || !smithCache.width || !smithCache.height) smithCache = buildSmith();
-  if (!smithCache.width || !smithCache.height) return;
-  bctx.save(); bctx.setTransform(1, 0, 0, 1, 0, 0); bctx.globalAlpha = (light ? 0.75 : 0.7); bctx.drawImage(smithCache, 0, 0); bctx.restore();
-  // impedance marker on the Smith chart
-  const zs = sim ? sim.Zin : res && Z_NOM[res.rec.id] ? [Z_NOM[res.rec.id], 0] : null;
-  if (zs) { const { cx, cy, R } = smithGeom(), den = (zs[0] + 50) ** 2 + zs[1] ** 2;
-    const gr = (zs[0] ** 2 + zs[1] ** 2 - 2500) / den, gi = 100 * zs[1] / den, x = cx + R * gr, y = cy - R * gi;
-    bctx.globalAlpha = 0.85 * A; bctx.fillStyle = tokens.wave2; bctx.beginPath(); bctx.arc(x, y, 4, 0, 2 * Math.PI); bctx.fill();
-    bctx.font = "11px " + font(); bctx.textAlign = "center"; bctx.fillText(sim ? `Z ≈ ${fmtZ(zs)}` : `≈ ${zs[0]} Ω`, x, y + 18); bctx.globalAlpha = 1; }
-
+  c.fillText("inductive", cx, cy - R + 26); c.fillText("capacitive", cx, cy + R - 20);
+  c.fillStyle = tokens.dim; c.fillText("SWR 2", cx, cy + R / 3 + 12);
+  const cap = $("smithCap"), zs = sim ? sim.Zin : null;
+  if (zs) { const den = (zs[0] + 50) ** 2 + zs[1] ** 2, gr = (zs[0] ** 2 + zs[1] ** 2 - 2500) / den, gi = 100 * zs[1] / den, x = cx + R * gr, y = cy - R * gi;
+    c.fillStyle = tokens.accent; c.strokeStyle = tokens.halo; c.lineWidth = 2; c.beginPath(); c.arc(x, y, 5.5, 0, 2 * Math.PI); c.fill(); c.stroke();
+    cap.textContent = `Simulated feed impedance ${fmtZ(zs)}. The centre is a perfect 50 Ω match; inside the dashed circle the SWR is below 2.`; }
+  else cap.textContent = simPending ? "Simulating…" : "No simulated impedance for these inputs.";
+  c.textAlign = "start";
 }
 function fxLoop(ts) {
-  const step = bgW < 760 ? 50 : 33;
+  const step = innerWidth < 760 ? 50 : 33;
   if (ts - fxLast >= step) {
     drawSpectrum(ts);
     fxLast = ts;
@@ -1538,10 +1548,10 @@ function fxLoop(ts) {
 }
 function fxUpdate() {
   cancelAnimationFrame(fxRaf); fxRaf = 0;
-  drawBg(0); drawSpectrum(0);
+  drawSpectrum(0);
   if (fxOn && !reduceMotion.matches && !document.hidden) fxRaf = requestAnimationFrame(fxLoop);
 }
-function fxRefresh() { drawBg(0); if (!fxRaf) drawSpectrum(0); }
+function fxRefresh() { drawSmith(); if (!fxRaf) drawSpectrum(0); }
 
 /* ---------- Header banner: the electromagnetic spectrum ----------
    Seven bands as in the classic school chart (radio to gamma). A chirped wave shrinks
@@ -1635,7 +1645,7 @@ new ResizeObserver(specResize).observe(spec);
    Far field of an ideal thin half-wave current (or a quarter-wave over ideal ground):
    E(θ) = cos(π/2·cosθ) / sinθ, θ from the conductor. Drawn as a solid surface whose
    distance from the antenna is E in that direction, coloured with a jet scale. */
-let radT = 0, radOn = true, radOpacity = 1;
+let radT = 0, radOn = true, radOpacity = 0.55;
 const FIB = (() => { const N = 1500, ga = Math.PI * (3 - Math.sqrt(5)), out = [];
   for (let i = 0; i < N; i++) { const z = 1 - 2 * (i + 0.5) / N, r = Math.sqrt(1 - z * z), a = ga * i; out.push([r * Math.cos(a), r * Math.sin(a), z]); }
   return out; })();
@@ -1651,7 +1661,26 @@ function radWeights(rec) {
   const ri = radInfo(rec);
   return wCache[rec.id] = FIB.map(([x, y, z]) => patternE(ri.model, ri.axis === "x" ? x : z) ** 2);
 }
-let sim = null;
+let sim = null, simTimer = 0, simPending = false, simNote = "";
+// Runs the solver for the current design. The helix is slow, so it is deferred and debounced.
+function scheduleSim() {
+  clearTimeout(simTimer); simPending = false; simNote = "";
+  if (!res || !MOMDEF[res.rec.id]) { sim = null; return; }
+  if (res.rec.id === "jpole" && res.d.sp <= 2 * wireRadius()) { sim = null; simNote = "Conductor spacing must be larger than the conductor diameter."; return; }
+  if (res.rec.id !== "helix") { sim = simulate(res); return; }
+  sim = null; simPending = true; const r = res;
+  simTimer = setTimeout(() => { if (res !== r) return; sim = simulate(r); simPending = false; updateSim(); fxRefresh(); render(); }, 200);
+}
+function updateSim() {
+  const cap = $("radCap"), ids = ["sDir", "sFb", "sZ", "sSwr"], set = (id, t, cls) => { const e = $(id); e.textContent = t; e.className = "v" + (cls ? " " + cls : ""); };
+  document.body.classList.toggle("nosim", !!(res && res.rec.noSim));
+  if (!res) { ids.forEach(i => set(i, "–")); cap.textContent = ""; return; }
+  if (res.rec.noSim) { cap.textContent = res.rec.noSim; return; }
+  if (!sim) { ids.forEach(i => set(i, simPending ? "…" : "–")); cap.textContent = simPending ? "Simulating…" : simNote || "Simulation not available for these inputs."; return; }
+  set("sDir", sim.dmax.toFixed(1) + " dBi"); set("sFb", sim.fb > 3 ? sim.fb.toFixed(0) + " dB" : "–"); set("sZ", fmtZ(sim.Zin));
+  set("sSwr", (sim.swr < 20 ? sim.swr.toFixed(1) : "> 20") + " : 1", sim.swr <= 2 ? "good" : sim.swr > 3 ? "poor" : "");
+  cap.innerHTML = `Simulated in free space at the feed point, before any matching. Pattern colour: weak<span class="cbar" aria-hidden="true"></span>strong.${sim.thick ? " <b>Wire is thick for this frequency: treat these numbers as rough.</b>" : ""}`;
+}
 const simCache = new Map(), SIM_NT = 36, SIM_NP = 48;
 const SIM_DIRS = (() => { const out = [];
   for (let i = 0; i <= SIM_NT; i++) { const th = i / SIM_NT * Math.PI;
@@ -1681,11 +1710,8 @@ function simulate(r, aOverride) {
 const jet = t => { const c = x => 255 * Math.max(0, Math.min(1, x)); return [c(1.5 - Math.abs(4 * t - 3)), c(1.5 - Math.abs(4 * t - 2)), c(1.5 - Math.abs(4 * t - 1))]; };
 const fmtZ = z => `${z[0].toFixed(0)} ${z[1] >= 0 ? "+" : "−"} j${Math.abs(z[1]).toFixed(0)} Ω`;
 function drawRadiation(pt, scale, modelExt) {
-  const cap = $("radCap");
-  if (!radOn || !res) { cap.hidden = true; return; }
-  cap.hidden = false;
-  if (!sim) { cap.textContent = res.rec.noSim || "Simulation not available for these inputs"; return; }
-  const o = sim.center, R0 = modelExt * 0.85, NT = SIM_NT, NP = SIM_NP, G = [];
+  if (!radOn || !res || !sim) return;
+  const o = sim.center, R0 = modelExt * 0.7, NT = SIM_NT, NP = SIM_NP, G = [];
   for (let i = 0; i <= NT; i++) {
     const th = i / NT * Math.PI, row = [];
     for (let j = 0; j <= NP; j++) {
@@ -1711,8 +1737,6 @@ function drawRadiation(pt, scale, modelExt) {
     if (solid) { ctx.strokeStyle = col; ctx.lineWidth = 0.7; ctx.stroke(); }
   }
   ctx.restore();
-  const sw = sim.swr < 20 ? sim.swr.toFixed(1) : "> 20";
-  cap.innerHTML = `Simulated in free space · max ${sim.dmax.toFixed(1)} dBi${sim.fb > 3 ? ` · front/back ${sim.fb.toFixed(0)} dB` : ""} · Z ${fmtZ(sim.Zin)} · SWR ${sw} on 50 Ω · weak<span class="cbar" aria-hidden="true"></span>strong${sim.thick ? " · <b>Wire is thick for this frequency: treat these numbers as rough.</b>" : ""}`;
 }
 
 /* ---------- Antenna wiki: live dipole length comparison ---------- */
@@ -1746,12 +1770,12 @@ function project(p, scale, cx, cy) {
 function render() {
   const W = canvas.clientWidth, H = canvas.clientHeight; if (!W || !H) return;
   ctx.clearRect(0, 0, W, H);
-  if (!model.length) { $("radCap").hidden = true; return; }
+  if (!model.length) return;
   const pts = model.flatMap(s => [s.a, s.b]), mn = [1e12, 1e12, 1e12], mx = [-1e12, -1e12, -1e12];
   pts.forEach(p => [p.x, p.y, p.z].forEach((n, i) => { mn[i] = Math.min(mn[i], n); mx[i] = Math.max(mx[i], n); }));
   const c = v((mn[0] + mx[0]) / 2, (mn[1] + mx[1]) / 2, (mn[2] + mx[2]) / 2);
   const radius = Math.max(mx[0] - mn[0], mx[1] - mn[1], mx[2] - mn[2], 1e-6);
-  const fit = radOn && sim ? radius * 1.9 : radius;
+  const fit = radOn && sim ? radius * 1.55 : radius;
   const scale = Math.min(W, H) * 0.8 / fit * cam.zoom;
   const pt = p => project(v(p.x - c.x, p.y - c.y, p.z - c.z), scale, W / 2, H / 2);
 
@@ -1797,8 +1821,6 @@ function render() {
     });
     ctx.textAlign = "start";
   }
-  ctx.fillStyle = tokens.muted; ctx.font = "11px " + font(); ctx.textAlign = "right";
-  ctx.fillText("Geometry only · conductor thickness not to scale", W - 10, H - 10); ctx.textAlign = "start";
 }
 function line(a, b) { ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); }
 function roundRect(x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.fill(); }
@@ -1848,6 +1870,7 @@ $("rows").addEventListener("click", e => {
   document.querySelectorAll("#rows tr").forEach(r => r.classList.toggle("hl", r.dataset.id === highlight));
   render();
 });
+$("rows").addEventListener("keydown", e => { if ((e.key === "Enter" || e.key === " ") && e.target.matches("tr[data-id]")) { e.preventDefault(); e.target.click(); } });
 
 /* ---------- Export ---------- */
 function exportMeta() {
@@ -1900,7 +1923,7 @@ document.querySelectorAll("[role=tab]").forEach(t => t.addEventListener("click",
 const QUIZ = [
   { q: "A 1:1 SWR tells you…", a: ["the antenna radiates efficiently", "the line sees a good match at the measurement point", "the antenna has 8 dBi gain"], ok: 1, why: "SWR describes mismatch on the line. A dummy load has perfect SWR and radiates nothing." },
   { q: "On the tape Yagi, the substrate K factor accounts for…", a: ["the coax velocity factor", "the board shortening the resonant length", "the tape width"], ok: 1, why: "The board's dielectric slows the wave along the tape, so elements resonate shorter. Coax velocity factor is a different effect." },
-  { q: "Bending ground-plane radials further down mainly…", a: ["raises the feed impedance", "makes the antenna horizontal", "lowers the frequency by half"], ok: 0, why: "Flat radials give roughly 36 Ω; sloping them down raises it toward 50 Ω." },
+  { q: "Bending ground-plane radials further down mainly…", a: ["raises the feed impedance", "makes the antenna horizontal", "lowers the frequency by half"], ok: 0, why: "Four flat radials give roughly 20–25 Ω; sloping them down raises it, reaching about 50 Ω near 30°." },
   { q: "Your SWR dip is at 425 MHz but you designed for 435 MHz. The antenna is…", a: ["too long", "too short", "fine; SWR dips are always low"], ok: 0, why: "A longer conductor resonates at a lower frequency. Trim a little and measure again." },
   { q: "On a J-pole, moving the feed tap mainly changes…", a: ["the frequency of the SWR dip", "how low the SWR goes", "the polarisation"], ok: 1, why: "The tap selects the impedance along the stub. Lengths set the frequency." }
 ];
@@ -1930,10 +1953,10 @@ function setTheme(t, save) {
   if (t === "auto") document.documentElement.removeAttribute("data-theme"); else document.documentElement.setAttribute("data-theme", t);
   $("themeBtn").textContent = "Theme: " + t[0].toUpperCase() + t.slice(1);
   if (save) store.set("aw-theme", t);
-  readTokens(); smithCache = null; render(); fxRefresh(); if (res) drawPattern(res.rec.info.pattern);
+  readTokens(); render(); fxRefresh(); if (res) drawPattern(res.rec.info.pattern);
 }
 $("themeBtn").addEventListener("click", () => { const cur = document.documentElement.getAttribute("data-theme") || "auto"; setTheme(THEMES[(THEMES.indexOf(cur) + 1) % 3], true); });
-matchMedia("(prefers-color-scheme: light)").addEventListener("change", () => { readTokens(); smithCache = null; fxRefresh(); render(); if (res) drawPattern(res.rec.info.pattern); });
+matchMedia("(prefers-color-scheme: light)").addEventListener("change", () => { readTokens(); fxRefresh(); render(); if (res) drawPattern(res.rec.info.pattern); });
 $("info").addEventListener("toggle", () => store.set("aw-info", $("info").open ? "1" : "0"));
 
 /* ---------- Init ---------- */
@@ -1943,6 +1966,7 @@ $("substrate").innerHTML = SUBSTRATES.map(([id, l]) => `<option value="${id}">${
 $("units").addEventListener("change", () => { store.set("aw-units", $("units").value); generate(); });
 $("type").addEventListener("change", () => { highlight = null; const rec = BY_ID[$("type").value], f = +$("freq").value;
   if (rec.band && !(f >= rec.band[0] && f <= rec.band[1])) $("freq").value = rec.typicalF;
+  const cd = rec.conductor || ["copper", 2]; $("material").value = cd[0]; $("diameter").value = inputImp ? +(cd[1] / 25.4).toFixed(3) : cd[1];
   setView("iso"); generate(); });
 $("presets").addEventListener("click", e => { const b = e.target.closest("[data-f]"); if (b) { $("freq").value = b.dataset.f; generate(); } });
 new ResizeObserver(resize).observe(canvas);
@@ -1959,9 +1983,7 @@ function setFx(on, save) { fxOn = on; $("fxBtn").setAttribute("aria-pressed", on
 $("fxBtn").addEventListener("click", () => setFx(!fxOn, true));
 reduceMotion.addEventListener("change", fxUpdate);
 document.addEventListener("visibilitychange", fxUpdate);
-addEventListener("resize", bgResize);
-addEventListener("scroll", fxRefresh, { passive: true });
-function setRad(on, save) { radOn = on; sim = on && res ? simulate(res) : null; fxRefresh(); $("radBtn").setAttribute("aria-pressed", on); $("radOp").disabled = !on; if (save) store.set("aw-rad2", on ? "1" : "0"); render(); }
+function setRad(on, save) { radOn = on; $("radBtn").setAttribute("aria-pressed", on); $("radOp").disabled = !on; if (save) store.set("aw-rad2", on ? "1" : "0"); render(); }
 $("radBtn").addEventListener("click", () => setRad(!radOn, true));
 $("radOp").addEventListener("input", () => { radOpacity = +$("radOp").value / 100; store.set("aw-radop", $("radOp").value); render(); });
 const savedOp = store.get("aw-radop"); if (savedOp && +savedOp >= 15 && +savedOp <= 100) { $("radOp").value = savedOp; radOpacity = +savedOp / 100; }
@@ -1970,7 +1992,7 @@ $("copyMail").addEventListener("click", () => copyText("bardhines@gmail.com", $(
 generate(); resize();
 let testsRun = false;
 document.querySelector('[data-tab="tTests"]').addEventListener("click", () => { if (!testsRun) { testsRun = true; $("testSummary").textContent = "Running…"; setTimeout(showTests, 30); } });
-bgResize(); setFx(fxOn, false);
+setFx(fxOn, false);
 </script>
 
 </body></html>
